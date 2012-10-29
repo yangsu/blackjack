@@ -43,35 +43,16 @@ function controller (params) {
     }
   });
 
-  app.get('/game/:id/hit', function(req, res) {
+  app.get('/game/:id/:action', function(req, res) {
     var id = req.params.id
+      , action = req.params.action
       , game = games[id];
-    if (game) {
-      game.hit();
-      res.send(game.toJSON());
-    } else {
+    if (!game) {
       res.send('Invalid game id: ' + id);
-    }
-  });
-
-  app.get('/game/:id/stand', function(req, res) {
-    var id = req.params.id
-      , game = games[id];
-    if (game) {
-      game.stand();
-      res.send(game.toJSON());
+    } else if (!game[action]) {
+      res.send('Invalid action: ' + action);
     } else {
-      res.send('Invalid game id: ' + id);
-    }
-  });
-
-  app.get('/game/:id/new', function(req, res) {
-    var id = req.params.id
-      , game = games[id];
-    if (game) {
-      res.send(game.newRound().toJSON());
-    } else {
-      res.send('Invalid game id: ' + id);
+      res.send(game[action]().toJSON());
     }
   });
 }
