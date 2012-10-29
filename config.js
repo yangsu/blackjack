@@ -1,7 +1,7 @@
 var config = {
   suits: ['Spades', 'Diamonds', 'Clubs', 'Hearts'],
   symbolToValue: {
-    'A' : 1,
+    'A' : 11,
     '2' : 2,
     '3' : 3,
     '4' : 4,
