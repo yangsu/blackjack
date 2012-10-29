@@ -13,7 +13,6 @@ function Blackjack () {
 Blackjack.prototype.newRound = function() {
   this.roundState = '';
   this.roundEnded = false;
-  this.dealerStands = false;
 
   this.handNumber += 1;
   this.dealer = new Hand(this.shoe.draw(), this.shoe.draw(), true);
@@ -32,25 +31,29 @@ Blackjack.prototype.endRound = function(message) {
 };
 
 Blackjack.prototype.playDealer = function() {
-  if (!this.roundEnded && !this.dealerStands) {
-    var dealerValue = this.dealer.getValue();
-    // dealer must hit if his cards have values less than the threshold
-    if (_.max(dealerValue) < config.dealerHitThreshold) {
+  while (!this.roundEnded) {
+    var dealerValue = this.dealer.getValue()
+      , maxDealerValue = _.max(dealerValue);
+    if (
+        // dealer must hit if his cards have values less than the threshold
+        (maxDealerValue < config.dealerHitThreshold) ||
+        // or if he has cards with value equal to the threshold but has an ace
+        (maxDealerValue === config.dealerHitThreshold && dealerValue.length > 1)
+    ) {
       this.dealer.addCard(this.shoe.draw());
-      this.roundState = 'Dealer hits';
+
       this.checkDealer();
 
       if (this.dealer.getCount() === config.maxCardsInHand) {
-        this.compareHands();
+        this.compareHandsAndEndRound();
       }
     } else {
-      this.roundState = 'Dealer stands';
-      this.dealerStands = true;
+      this.compareHandsAndEndRound();
     }
   }
 };
 
-Blackjack.prototype.compareHands = function() {
+Blackjack.prototype.compareHandsAndEndRound = function() {
   if (!this.roundEnded) {
     var playerMax = _.max(this.player.getValue())
       , dealerMax = _.max(this.dealer.getValue())
@@ -71,11 +74,10 @@ Blackjack.prototype.hit = function() {
   if (!this.roundEnded) {
     this.player.addCard(this.shoe.draw());
     this.checkPlayer();
-  }
-  this.playDealer();
 
-  if (this.player.getCount() === config.maxCardsInHand) {
-    this.compareHands();
+    if (this.player.getCount() === config.maxCardsInHand) {
+      this.playDealer();
+    }
   }
 
   return this;
@@ -83,11 +85,6 @@ Blackjack.prototype.hit = function() {
 
 Blackjack.prototype.stand = function() {
   this.playDealer();
-
-  if (this.dealerStands) {
-    this.compareHands();
-  }
-
   return this;
 };
 
@@ -110,7 +107,6 @@ Blackjack.prototype.checkDealer = function() {
     this.endRound('Dealer\'s hand is busted. You win!');
   } else if (_.contains(dealerValue, 21)) {
     this.endRound('Dealer has a BlackJack. You lose!');
-  } else {
   }
 };
 
