@@ -40,9 +40,12 @@ Hand.prototype.getValue = function() {
 };
 
 Hand.prototype.toJSON = function() {
-  return _.map(this.cards, function (card) {
-    return card.toJSON();
-  });
+  return {
+    value: this.getValue(),
+    cards: _.map(this.cards, function (card) {
+      return card.toJSON();
+    })
+  };
 };
 
 module.exports = Hand;

@@ -27,10 +27,14 @@ function controller (params) {
       , newShoe = new Shoe(3)
       , card1 = newShoe.draw()
       , card2 = newShoe.draw();
+
     gameState[gameId] = {
       shoe: newShoe,
       hand: new Hand(card1, card2)
     };
+
+    console.log('New game started: ' + gameId);
+
     res.redirect('/game/' + gameId);
   });
 
@@ -39,9 +43,21 @@ function controller (params) {
   });
 
   app.get('/game/:id', function(req, res) {
-    var id = req.params.id;
-    if (gameState[id]) {
-      res.send(gameState[id]);
+    var id = req.params.id
+      , state = gameState[id];
+    if (state) {
+      res.send(state.hand.toJSON());
+    } else {
+      res.send('Invalid game id: ' + id);
+    }
+  });
+
+  app.get('/game/:id/hit', function(req, res) {
+    var id = req.params.id
+      , state = gameState[id];
+    if (state) {
+      state.hand.addCard(state.shoe.draw());
+      res.send(state.hand.toJSON());
     } else {
       res.send('Invalid game id: ' + id);
     }
