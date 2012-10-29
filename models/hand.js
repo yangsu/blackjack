@@ -47,6 +47,10 @@ Hand.prototype.getValue = function() {
   return this.value;
 };
 
+Hand.prototype.getCount = function() {
+  return this.cards.length;
+};
+
 Hand.prototype.toJSON = function() {
   var json = {
     cards: _.map(this.cards.slice(this.hideBottomCard ? 1 : 0), function (card) {

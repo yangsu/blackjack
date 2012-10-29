@@ -35,16 +35,35 @@ Blackjack.prototype.playDealer = function() {
   if (!this.roundEnded && !this.dealerStands) {
     var dealerValue = this.dealer.getValue();
     // dealer must hit if his cards have values less than the threshold
-    if (_.all(dealerValue, function (value) {
-      return value < config.dealerHitThreashold
-    })) {
+    if (_.max(dealerValue) < config.dealerHitThreshold) {
       this.dealer.addCard(this.shoe.draw());
       this.roundState = 'Dealer hits';
       this.checkDealer();
+
+      if (this.dealer.getCount() === config.maxCardsInHand) {
+        this.compareHands();
+      }
     } else {
       this.roundState = 'Dealer stands';
       this.dealerStands = true;
     }
+  }
+};
+
+Blackjack.prototype.compareHands = function() {
+  if (!this.roundEnded) {
+    var playerMax = _.max(this.player.getValue())
+      , dealerMax = _.max(this.dealer.getValue())
+      , message = '';
+
+    if (playerMax > dealerMax) {
+      message = 'You win!';
+    } else if (playerMax === dealerMax) {
+      message = 'Draw';
+    } else {
+      message = 'You lose!';
+    }
+    this.endRound(message);
   }
 };
 
@@ -54,28 +73,21 @@ Blackjack.prototype.hit = function() {
     this.checkPlayer();
   }
   this.playDealer();
+
+  if (this.player.getCount() === config.maxCardsInHand) {
+    this.compareHands();
+  }
+
   return this;
 };
 
 Blackjack.prototype.stand = function() {
-  if (!this.roundEnded) {
-    this.playDealer();
+  this.playDealer();
 
-    if (this.dealerStands) {
-      var playerMax = _.max(this.player.getValue())
-        , dealerMax = _.max(this.dealer.getValue())
-        , message = '';
-
-      if (playerMax > dealerMax) {
-        message = 'You win!';
-      } else if (playerMax === dealerMax) {
-        message = 'Draw';
-      } else {
-        message = 'You lose!';
-      }
-      this.endRound(message);
-    }
+  if (this.dealerStands) {
+    this.compareHands();
   }
+
   return this;
 };
 

@@ -20,7 +20,8 @@ var config = {
   gameIdLength: 10,
   gameIdCharset: '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
 
-  dealerHitThreshold: 17
+  dealerHitThreshold: 17,
+  maxCardsInHand: 5
 };
 
 module.exports = config;
