@@ -45,4 +45,4 @@ Hand.prototype.toJSON = function() {
   });
 };
 
-exports.Hand = Hand;
+module.exports = Hand;

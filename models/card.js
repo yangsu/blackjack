@@ -1,5 +1,5 @@
 var _ = require('lodash')
-  , config = require('../config.js').config;
+  , config = require('../config.js');
 
 function Card(suit, symbol) {
   if (!_.contains(config.suits, suit)) {
@@ -21,4 +21,4 @@ Card.prototype.toJSON = function() {
   };
 };
 
-exports.Card = Card;
+module.exports = Card;

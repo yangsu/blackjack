@@ -1,7 +1,7 @@
 var _ = require('lodash')
-  , Card = require('../models/card.js').Card
-  , Deck = require('../models/deck.js').Deck
-  , Hand = require('../models/hand.js').Hand;
+  , Card = require('../models/card.js')
+  , Deck = require('../models/deck.js')
+  , Hand = require('../models/hand.js');
 
 exports.index = function(req, res){
   var c1 = new Card('Spades', 'A');
