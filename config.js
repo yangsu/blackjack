@@ -14,7 +14,8 @@ var config = {
     'J' : 10,
     'Q' : 10,
     'K' : 10,
-  }
+  },
+  defaultThreshold: 0
 };
 
 module.exports = config;

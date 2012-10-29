@@ -4,15 +4,21 @@ var _ = require('lodash')
 
 function Deck(cards) {
   this.cards = cards;
+  this.currentCardIndex = 0;
 }
 
 Deck.prototype.shuffle = function() {
   this.cards = _.shuffle(this.cards);
+  this.currentCardIndex = 0;
   return this;
 };
 
+Deck.prototype.getNumberOfCardsRemaining = function() {
+  return this.cards.length - this.currentCardIndex;
+};
+
 Deck.prototype.draw = function() {
-  return this.cards.shift();
+  return this.cards[this.currentCardIndex++];
 };
 
 Deck.prototype.toJSON = function() {
