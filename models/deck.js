@@ -22,16 +22,26 @@ Deck.prototype.toJSON = function() {
 };
 
 Deck.standardDeck = (function () {
+  // get all symbols A-K
   var symbols = _.keys(config.symbolToValue)
-    , templateCards = _.chain(config.suits).map(function (suit) {
-        return _.map(symbols, function (symbol) {
-          return new Card(suit, symbol);
-        });
-      }).flatten().value();
+  // for each suit, construct a card for each of the symbols => 1 deck
+    , templateCards = _.chain(config.suits)
+        .map(function (suit) {
+          return _.map(symbols, function (symbol) {
+            return new Card(suit, symbol);
+          });
+        })
+        .flatten()
+        .value();
+
+  // Allow multiple standard decks to be constructed as a single deck
   return function (numberOfDecks) {
-    var cards = _.chain(_.range(numberOfDecks || 1)).map(function () {
+    var cards = _.chain(_.range(numberOfDecks || 1))
+      .map(function () {
         return templateCards;
-      }).flatten().value();
+      })
+      .flatten()
+      .value();
     return new Deck(cards);
   };
 }());
