@@ -15,7 +15,9 @@ var config = {
     'Q' : 10,
     'K' : 10,
   },
-  defaultThreshold: 0
+  defaultThreshold: 0,
+  gameIdLength: 10,
+  gameIdCharset: '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 };
 
 module.exports = config;

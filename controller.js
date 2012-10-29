@@ -5,26 +5,46 @@ var _ = require('lodash')
   , Hand = require('./models/hand')
   , Shoe = require('./models/shoe');
 
+var gameState = {};
+
+var genId = function(l) {
+  var id = '';
+  for (var i = 0; i < l; i += 1) {
+    id += config.gameIdCharset[Math.floor(Math.random() * config.gameIdCharset.length)];
+  }
+  return id;
+}
 
 function controller (params) {
   var app = params.app;
 
   app.get('/', function(req, res){
-    var c1 = new Card('Spades', 'A');
-    var c2 = new Card('Spades', 'A');
-    var h = new Hand(c1, c2);
-    h.addCard(c1);
-    var d = Deck.standardDeck(3);
-    var s = new Shoe(1, 0);
-    var cards = _.map(_.range(65), function () {
-      return s.draw();
-    });
-    res.send({
-      l: cards.length,
-      c: cards,
-      ul: _.unique(cards).length,
-      u: _.unique(cards)
-    });
+    res.send('Welcome to Blackjack! Go to <a href="/start">/start</a> to begin');
+  });
+
+  app.get('/start', function(req, res) {
+    var gameId = genId(config.gameIdLength)
+      , newShoe = new Shoe(3)
+      , card1 = newShoe.draw()
+      , card2 = newShoe.draw();
+    gameState[gameId] = {
+      shoe: newShoe,
+      hand: new Hand(card1, card2)
+    };
+    res.redirect('/game/' + gameId);
+  });
+
+  app.get('/game', function(req, res) {
+    res.send('You must have a game id to play the game');
+  });
+
+  app.get('/game/:id', function(req, res) {
+    var id = req.params.id;
+    if (gameState[id]) {
+      res.send(gameState[id]);
+    } else {
+      res.send('Invalid game id: ' + id);
+    }
   });
 }
 
