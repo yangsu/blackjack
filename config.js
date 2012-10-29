@@ -16,8 +16,11 @@ var config = {
     'K' : 10,
   },
   defaultThreshold: 0,
+
   gameIdLength: 10,
-  gameIdCharset: '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+  gameIdCharset: '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
+
+  dealerHitThreshold: 17
 };
 
 module.exports = config;

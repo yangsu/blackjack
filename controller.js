@@ -22,7 +22,7 @@ function controller (params) {
   app.get('/start', function(req, res) {
     var gameId = genId(config.gameIdLength)
 
-    games[gameId] = new Blackjack;
+    games[gameId] = new Blackjack().newRound();
 
     console.log('New game started: ' + gameId);
 
@@ -60,6 +60,16 @@ function controller (params) {
     if (game) {
       game.stand();
       res.send(game.toJSON());
+    } else {
+      res.send('Invalid game id: ' + id);
+    }
+  });
+
+  app.get('/game/:id/new', function(req, res) {
+    var id = req.params.id
+      , game = games[id];
+    if (game) {
+      res.send(game.newRound().toJSON());
     } else {
       res.send('Invalid game id: ' + id);
     }
