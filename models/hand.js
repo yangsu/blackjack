@@ -1,9 +1,5 @@
 var _ = require('lodash');
 
-function Hand(card1, card2) {
-  this.cards = [card1, card2];
-}
-
 function calculateValue(cards) {
   var numOfAces = 0
     , sum = _.reduce(cards, function (memo, card) {
@@ -31,17 +27,30 @@ function calculateValue(cards) {
   return values;
 }
 
+function Hand(bottomCard, topCard) {
+  this.cards = [bottomCard, topCard];
+  this.value = calculateValue(this.cards);
+}
+
+Hand.prototype.getVisibleCards = function() {
+  return _.map(this.cards.slice(1), function (card) {
+    return card.toJSON();
+  });
+};
+
 Hand.prototype.addCard = function(card) {
   this.cards.push(card);
+  this.value = calculateValue(this.cards);
+  return this;
 };
 
 Hand.prototype.getValue = function() {
-  return calculateValue(this.cards);
+  return this.value;
 };
 
 Hand.prototype.toJSON = function() {
   return {
-    value: this.getValue(),
+    value: this.value,
     cards: _.map(this.cards, function (card) {
       return card.toJSON();
     })

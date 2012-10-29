@@ -1,11 +1,8 @@
 var _ = require('lodash')
   , config = require('./config')
-  , Card = require('./models/card')
-  , Deck = require('./models/deck')
-  , Hand = require('./models/hand')
-  , Shoe = require('./models/shoe');
+  , Blackjack = require('./models/blackjack');
 
-var gameState = {};
+var games = {};
 
 var genId = function(l) {
   var id = '';
@@ -24,14 +21,8 @@ function controller (params) {
 
   app.get('/start', function(req, res) {
     var gameId = genId(config.gameIdLength)
-      , newShoe = new Shoe(3)
-      , card1 = newShoe.draw()
-      , card2 = newShoe.draw();
 
-    gameState[gameId] = {
-      shoe: newShoe,
-      hand: new Hand(card1, card2)
-    };
+    games[gameId] = new Blackjack;
 
     console.log('New game started: ' + gameId);
 
@@ -44,9 +35,9 @@ function controller (params) {
 
   app.get('/game/:id', function(req, res) {
     var id = req.params.id
-      , state = gameState[id];
-    if (state) {
-      res.send(state.hand.toJSON());
+      , game = games[id];
+    if (game) {
+      res.send(game.toJSON());
     } else {
       res.send('Invalid game id: ' + id);
     }
@@ -54,10 +45,21 @@ function controller (params) {
 
   app.get('/game/:id/hit', function(req, res) {
     var id = req.params.id
-      , state = gameState[id];
-    if (state) {
-      state.hand.addCard(state.shoe.draw());
-      res.send(state.hand.toJSON());
+      , game = games[id];
+    if (game) {
+      game.hit();
+      res.send(game.toJSON());
+    } else {
+      res.send('Invalid game id: ' + id);
+    }
+  });
+
+  app.get('/game/:id/stand', function(req, res) {
+    var id = req.params.id
+      , game = games[id];
+    if (game) {
+      game.stand();
+      res.send(game.toJSON());
     } else {
       res.send('Invalid game id: ' + id);
     }
