@@ -79,9 +79,9 @@ Blackjack.prototype.stand = function() {
 
 Blackjack.prototype.checkPlayer = function() {
   var handValue = this.player.getValue();
-  // if there's no valid values, that means the player is busted
+  // if there's no valid values, that means the hand is busted
   if (handValue.length === 0) {
-    this.endRound('You player is busted and you lose!');
+    this.endRound('You hand is busted and you lose!');
   } else if (_.contains(handValue, 21)) {
     this.endRound('You have a BlackJack and you win!');
   } else {
@@ -91,9 +91,9 @@ Blackjack.prototype.checkPlayer = function() {
 
 Blackjack.prototype.checkDealer = function() {
   var dealerValue = this.dealer.getValue();
-  // if there's no valid values, that means the player is busted
+  // if there's no valid values, that means the hand is busted
   if (dealerValue.length === 0) {
-    this.endRound('Dealer\'s player is busted. You win!');
+    this.endRound('Dealer\'s hand is busted. You win!');
   } else if (_.contains(dealerValue, 21)) {
     this.endRound('Dealer has a BlackJack. You lose!');
   } else {
