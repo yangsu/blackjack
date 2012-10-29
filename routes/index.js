@@ -4,6 +4,6 @@ var _ = require('lodash')
 
 exports.index = function(req, res){
   var c = new Card('Spades', 'J');
-  var d = new Deck([c, c, c]);
-  res.send(d.toJSON());
+  var d = Deck.standardDeck(3);
+  res.send(d.shuffle().toJSON());
 };
