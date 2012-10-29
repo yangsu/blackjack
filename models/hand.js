@@ -27,16 +27,11 @@ function calculateValue(cards) {
   return values;
 }
 
-function Hand(bottomCard, topCard) {
+function Hand(bottomCard, topCard, hideBottomCard) {
   this.cards = [bottomCard, topCard];
   this.value = calculateValue(this.cards);
+  this.hideBottomCard = !!hideBottomCard;
 }
-
-Hand.prototype.getVisibleCards = function() {
-  return _.map(this.cards.slice(1), function (card) {
-    return card.toJSON();
-  });
-};
 
 Hand.prototype.addCard = function(card) {
   this.cards.push(card);
@@ -44,17 +39,28 @@ Hand.prototype.addCard = function(card) {
   return this;
 };
 
+Hand.prototype.revealCards = function() {
+  this.hideBottomCard = false;
+};
+
 Hand.prototype.getValue = function() {
   return this.value;
 };
 
 Hand.prototype.toJSON = function() {
-  return {
-    value: this.value,
-    cards: _.map(this.cards, function (card) {
+  var json = {
+    cards: _.map(this.cards.slice(this.hideBottomCard ? 1 : 0), function (card) {
       return card.toJSON();
     })
   };
+
+  if (this.hideBottomCard) {
+    return json;
+  } else {
+    return _.extend(json, {
+      value: this.value
+    });
+  }
 };
 
 module.exports = Hand;

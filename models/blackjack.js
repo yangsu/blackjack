@@ -16,7 +16,7 @@ Blackjack.prototype.newRound = function() {
   this.dealerStands = false;
 
   this.handNumber += 1;
-  this.dealer = new Hand(this.shoe.draw(), this.shoe.draw());
+  this.dealer = new Hand(this.shoe.draw(), this.shoe.draw(), true);
   this.player = new Hand(this.shoe.draw(), this.shoe.draw());
 
   this.checkPlayer();
@@ -28,12 +28,13 @@ Blackjack.prototype.newRound = function() {
 Blackjack.prototype.endRound = function(message) {
   this.roundEnded = true;
   this.roundState = message;
+  this.dealer.revealCards();
 };
 
 Blackjack.prototype.playDealer = function() {
   if (!this.roundEnded && !this.dealerStands) {
     var dealerValue = this.dealer.getValue();
-    // dealer must hit if his cards have values less than 17
+    // dealer must hit if his cards have values less than the threshold
     if (_.all(dealerValue, function (value) {
       return value < config.dealerHitThreashold
     })) {
@@ -59,6 +60,7 @@ Blackjack.prototype.hit = function() {
 Blackjack.prototype.stand = function() {
   if (!this.roundEnded) {
     this.playDealer();
+
     if (this.dealerStands) {
       var playerMax = _.max(this.player.getValue())
         , dealerMax = _.max(this.dealer.getValue())
@@ -104,7 +106,7 @@ Blackjack.prototype.toJSON = function() {
   return {
     handNumber: this.handNumber,
     state: this.roundState,
-    dealer: this.dealer.getVisibleCards(),
+    dealer: this.dealer.toJSON(),
     player: this.player.toJSON()
   };
 };
