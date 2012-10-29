@@ -17,7 +17,8 @@ Card.prototype.toJSON = function() {
   return {
     suit: this.suit,
     symbol: this.symbol,
-    value: this.value
+    // special case for Aces
+    value: (this.value == 11) ? [1, 11] : this.value
   };
 };
 
