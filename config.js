@@ -1,6 +1,6 @@
 var config = {
   suits: ['Spades', 'Diamonds', 'Clubs', 'Hearts'],
-  valuemap: {
+  symbolToValue: {
     'A' : 1,
     '2' : 2,
     '3' : 3,

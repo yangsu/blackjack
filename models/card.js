@@ -1,22 +1,22 @@
 var _ = require('lodash')
   , config = require('../config.js').config;
 
-function Card(suit, card) {
+function Card(suit, symbol) {
   if (!_.contains(config.suits, suit)) {
     throw new Error("Invalid Suit: " + suit);
-  } else if (config.valuemap[card] === undefined) {
-    throw new Error("Card must be A - K, and not " + card);
+  } else if (config.symbolToValue[symbol] === undefined) {
+    throw new Error("Card must be A - K, and not " + symbol);
   }
 
   this.suit = suit;
-  this.card = card;
-  this.value = config.valuemap[card];
+  this.symbol = symbol;
+  this.value = config.symbolToValue[symbol];
 };
 
 Card.prototype.toJSON = function() {
   return {
     suit: this.suit,
-    card: this.card,
+    symbol: this.symbol,
     value: this.value
   };
 };
