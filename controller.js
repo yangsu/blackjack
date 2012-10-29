@@ -16,17 +16,17 @@ function controller (params) {
   var app = params.app;
 
   app.get('/', function(req, res){
-    res.send('Welcome to Blackjack! Go to <a href="/start">/start</a> to begin');
+    res.render('index', { link: '/start' });
   });
 
   app.get('/start', function(req, res) {
     var gameId = genId(config.gameIdLength)
-
     games[gameId] = new Blackjack().newRound();
 
     console.log('New game started: ' + gameId);
 
-    res.redirect('/game/' + gameId);
+    // res.redirect('/game/' + gameId);
+    res.render('start', { id: gameId });
   });
 
   app.get('/game', function(req, res) {
@@ -39,7 +39,7 @@ function controller (params) {
     if (game) {
       res.send(game.toJSON());
     } else {
-      res.send('Invalid game id: ' + id);
+      res.render('invalidid', { id : id });
     }
   });
 
@@ -48,9 +48,9 @@ function controller (params) {
       , action = req.params.action
       , game = games[id];
     if (!game) {
-      res.send('Invalid game id: ' + id);
+      res.render('invalidid', { id : id });
     } else if (!game[action]) {
-      res.send('Invalid action: ' + action);
+      res.render('invalidaction', { action : action });
     } else {
       res.send(game[action]().toJSON());
     }

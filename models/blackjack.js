@@ -7,17 +7,18 @@ var _ = require('lodash')
 
 function Blackjack () {
   this.shoe = new Shoe(3);
-  this.handNumber = 0;
+  this.roundNumber = 0;
 }
 
 Blackjack.prototype.newRound = function() {
   this.roundState = '';
   this.roundEnded = false;
+  this.roundNumber += 1;
 
-  this.handNumber += 1;
   this.dealer = new Hand(this.shoe.draw(), this.shoe.draw(), true);
   this.player = new Hand(this.shoe.draw(), this.shoe.draw());
 
+  // Check for blackjack
   this.checkPlayer();
   this.checkDealer();
 
@@ -112,7 +113,7 @@ Blackjack.prototype.checkDealer = function() {
 
 Blackjack.prototype.toJSON = function() {
   return {
-    handNumber: this.handNumber,
+    roundNumber: this.roundNumber,
     state: this.roundState,
     dealer: this.dealer.toJSON(),
     player: this.player.toJSON()

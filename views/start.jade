@@ -1,0 +1,17 @@
+- var url = '/game/' + id;
+p
+  | You are playing Black Jack game
+  a(href=url)  #{url}
+
+p
+  | go to
+  a(href=url + '/hit')  #{url + '/hit'}
+  |  to hit
+p
+  | go to
+  a(href=url + '/stand')  #{url + '/stand'}
+  |  to stand
+p
+  | go to
+  a(href=url + '/newRound')  #{url + '/newRound'}
+  |  to start a newRound
