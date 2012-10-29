@@ -1,5 +1,5 @@
 var _ = require('lodash')
-  , config = require('../config.js');
+  , config = require('../config');
 
 function Card(suit, symbol) {
   if (!_.contains(config.suits, suit)) {

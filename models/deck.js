@@ -1,6 +1,6 @@
 var _ = require('lodash')
-  , Card = require('./card.js')
-  , config = require('../config.js');
+  , Card = require('./card')
+  , config = require('../config');
 
 function Deck(cards) {
   this.cards = cards;

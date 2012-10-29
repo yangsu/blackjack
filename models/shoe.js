@@ -1,5 +1,5 @@
-var config = require('../config.js')
-  , Deck = require('./deck.js');
+var config = require('../config')
+  , Deck = require('./deck');
 
 function Shoe(numberOfDecks, shuffleThreshold) {
   this.deck = Deck.standardDeck(numberOfDecks).shuffle();
